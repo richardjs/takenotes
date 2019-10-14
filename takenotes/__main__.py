@@ -13,6 +13,23 @@ import takenotes.cli
 TICKS_PER_BEAT = 480
 
 
+def save_song(msgs):
+    mid = mido.MidiFile()
+    mid.ticks_per_beat = TICKS_PER_BEAT
+
+    last_time = msgs[0].time
+    for msg in msgs:
+        ticks = int(mido.second2tick(
+            msg.time - last_time, TICKS_PER_BEAT, 500000))
+        last_time = msg.time
+        msg.time = ticks
+    track = mido.MidiTrack(msgs)
+
+    mid.tracks.append(track)
+    mid.save(datetime.datetime.now().strftime(
+        os.path.join(args.dir, args.filename_pattern)))
+
+
 args = takenotes.cli.cli()
 
 
@@ -51,21 +68,7 @@ last_msg_time = time.time()
 msgs = []
 while 1:
     if msgs and time.time() - last_msg_time > args.new_song_time:
-        mid = mido.MidiFile()
-        mid.ticks_per_beat = TICKS_PER_BEAT
-
-        last_time = msgs[0].time
-        for msg in msgs:
-            ticks = int(mido.second2tick(
-                msg.time - last_time, TICKS_PER_BEAT, 500000))
-            last_time = msg.time
-            msg.time = ticks
-        track = mido.MidiTrack(msgs)
-
-        mid.tracks.append(track)
-        mid.save(datetime.datetime.now().strftime(
-            os.path.join(args.dir, args.filename_pattern)))
-
+        save_song(msgs)
         outport.send(mido.Message('note_on', note=96))
         outport.send(mido.Message('note_on', note=103))
         msgs = []

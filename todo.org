@@ -6,7 +6,6 @@
 ** Star previous recording
 ** Delete previous recording
 ** Notifications on/off
-* Config
 * Web UI?
 * Post-save command hook? (e.g. for sending to remote server)
 * Song rendering?
