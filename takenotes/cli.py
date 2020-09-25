@@ -4,9 +4,9 @@ import os
 
 def cli():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--midi-input', default='Uno',
+    parser.add_argument('-i', '--midi-input',
                         help='regex for selecting MIDI input')
-    parser.add_argument('-o', '--midi-output', default='Uno',
+    parser.add_argument('-o', '--midi-output',
                         help='regex for selecting MIDI output')
 
     parser.add_argument('-d', '--dir', default=os.getcwd(),
