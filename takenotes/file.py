@@ -26,6 +26,4 @@ def save_song(msgs, filename):
     track = mido.MidiTrack(msgs)
 
     mid.tracks.append(track)
-#    mid.save(datetime.datetime.now().strftime(
-#        os.path.join(args.dir, args.filename_pattern)))
     mid.save(filename)
