@@ -22,22 +22,38 @@ song_started = False
 msgs = []
 notes_on = set()
 while 1:
+    # Branch that ends current song and starts a new song
+    # Must have a song started, no notes_on, and specified time since last message
     if song_started and len(notes_on) == 0 and time.time() - last_msg_time > args.new_song_time:
-        takenotes.file.save_song(msgs, datetime.datetime.now().strftime(
-            os.path.join(args.dir, args.filename_pattern)))
+        filename = datetime.datetime.now().strftime(
+            os.path.join(args.dir, args.filename_pattern))
+        print(f'Saving {filename}...')
+        takenotes.file.save_song(msgs, filename)
+
+        # Notification message
+        # TODO: Configuration options?
         outport.send(mido.Message('note_on', note=96))
         outport.send(mido.Message('note_on', note=103))
-        msgs = []
-        song_started = False
 
+        # Reset song state
+        song_started = False
+        msgs = []
+
+    # Process messages
     for msg in inport.iter_pending():
+        # We don't care about clock messages
         if msg.type == 'clock':
             continue
+
+        # Start songs on note_on, and keep track of which notes are on
         if msg.type == 'note_on':
             song_started = True
             notes_on.add(msg.note)
+
+        # On note_off, remove the tracked note
         if msg.type == 'note_off' or (msg.type == 'note_on' and msg.velocity == 0):
             notes_on.remove(msg.note)
+
         print(msg)
         print(notes_on)
         msg.time = time.time()
