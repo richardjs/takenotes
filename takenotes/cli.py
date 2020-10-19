@@ -14,7 +14,7 @@ def cli():
     parser.add_argument('-f', '--filename-pattern', default='%Y-%m-%d_%H-%M-%S.mid',
                         help='file name patter passed to strftime')
 
-    parser.add_argument('-t', '--new-song-time', type=int, default=10,
+    parser.add_argument('-t', '--new-song-time', type=int, default=7,
                         help='seconds of inactivity to wait before starting a new song')
 
     return parser.parse_args()

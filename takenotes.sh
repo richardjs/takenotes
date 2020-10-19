@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m takenotes $@
+python -m takenotes.listen $@

@@ -50,13 +50,15 @@ while 1:
             song_started = True
             notes_on.add(msg.note)
 
-        # On note_off, remove the tracked note
+        # Remove tracked notes on note_off or note_on with velocity 0
         if msg.type == 'note_off' or (msg.type == 'note_on' and msg.velocity == 0):
             notes_on.remove(msg.note)
 
+        t = time.time()
+        msg.time = t
+        last_msg_time = time.time()
+        msgs.append(msg)
+
         print(msg)
         print(notes_on)
-        msg.time = time.time()
-        msgs.append(msg)
         print(len(msgs))
-        last_msg_time = time.time()
