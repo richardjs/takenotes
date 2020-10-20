@@ -1,3 +1,5 @@
+import re
+
 import mido
 
 def open_ports(midi_input=None, midi_output=None):
